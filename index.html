@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Valentine 💖</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(180deg,#ffdde1,#ee9ca7);
+  text-align:center;
+  overflow-x:hidden;
+  color:#6b1e3b;
+}
+
+/* Falling hearts */
+.heart{
+  position:fixed;
+  top:-10px;
+  font-size:18px;
+  color:#ff4d6d;
+  animation:fall linear infinite;
+}
+@keyframes fall{
+  to{ transform:translateY(110vh); }
+}
+
+/* Countdown */
+#countdown{
+  font-size:18px;
+  margin-top:10px;
+  font-weight:500;
+}
+
+/* Envelope */
+.envelope{
+  width:320px;
+  height:220px;
+  margin:40px auto;
+  position:relative;
+  perspective:1000px;
+}
+.flap{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:#ffb6c1;
+  clip-path:polygon(0 0,100% 0,50% 60%);
+  transform-origin:top;
+  transition:1s;
+  border-radius:10px;
+}
+.letter{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:white;
+  border-radius:10px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.2);
+  padding:20px;
+  box-sizing:border-box;
+  transform:translateY(100%);
+  transition:1s;
+}
+.open .flap{
+  transform:rotateX(180deg);
+}
+.open .letter{
+  transform:translateY(0);
+}
+.script{
+  font-family:'Great Vibes',cursive;
+  font-size:26px;
+}
+
+/* Buttons */
+button,select,input{
+  padding:10px;
+  margin:5px;
+  border:none;
+  border-radius:6px;
+  font-size:14px;
+}
+button{
+  background:#ff4d6d;
+  color:white;
+  cursor:pointer;
+}
+
+/* Gallery */
+.gallery{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+  margin:20px;
+}
+.gallery img{
+  width:130px;
+  height:130px;
+  object-fit:cover;
+  border-radius:20px;
+  border:8px solid #ff69b4;
+  box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Map */
+#map{
+  width:90%;
+  height:280px;
+  margin:20px auto;
+  background:white;
+  border-radius:15px;
+  position:relative;
+  box-shadow:0 10px 20px rgba(0,0,0,0.15);
+}
+.pin{
+  position:absolute;
+  font-size:22px;
+  transform:translate(-50%,-50%);
+}
+
+/* Footer */
+footer{
+  margin:30px 0;
+  font-size:13px;
+}
+</style>
+</head>
+<body>
+
+<h1>Happy Valentine's Day 💖</h1>
+<div id="countdown"></div>
+
+<input type="text" id="messageInput" placeholder="Type your romantic message..." style="width:70%;max-width:400px;">
+<br>
+
+<select id="seal">
+  <option value="❤️">Heart Seal</option>
+  <option value="🌹">Rose Seal</option>
+  <option value="💋">Kiss Seal</option>
+</select>
+
+<br>
+
+<div class="envelope" onclick="openEnvelope(this)">
+  <div class="flap"></div>
+  <div class="letter">
+    <div id="displayMessage" class="script"></div>
+  </div>
+</div>
+
+<button onclick="generatePoem()">Generate Secret Poem ✨</button>
+<button onclick="toggleMusic()">🎵 Toggle Music</button>
+
+<br><br>
+
+<input type="file" id="upload" multiple accept="image/*">
+
+<div class="gallery" id="gallery"></div>
+
+<h2>Our Memory Map 🗺️</h2>
+<div id="map"></div>
+
+<footer>Made with Love 💌</footer>
+
+<audio id="music" loop>
+<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8a13e8b63.mp3?filename=romantic-piano-11085.mp3" type="audio/mp3">
+</audio>
+
+<script>
+/* Hearts Animation */
+function createHeart(){
+  const heart=document.createElement("div");
+  heart.className="heart";
+  heart.innerText="❤";
+  heart.style.left=Math.random()*100+"vw";
+  heart.style.animationDuration=(Math.random()*3+3)+"s";
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(),6000);
+}
+setInterval(createHeart,300);
+
+/* Countdown */
+function updateCountdown(){
+  const now=new Date();
+  let target=new Date(now.getFullYear(),1,14);
+  if(now>target) target.setFullYear(now.getFullYear()+1);
+  const diff=target-now;
+
+  const d=Math.floor(diff/(1000*60*60*24));
+  const h=Math.floor((diff/(1000*60*60))%24);
+  const m=Math.floor((diff/1000/60)%60);
+  const s=Math.floor((diff/1000)%60);
+
+  document.getElementById("countdown").innerText=
+  `${d} Days ${h} Hours ${m} Minutes ${s} Seconds 💘`;
+}
+setInterval(updateCountdown,1000);
+
+/* Envelope */
+function openEnvelope(el){
+  el.classList.toggle("open");
+  document.getElementById("displayMessage").innerHTML=
+  document.getElementById("messageInput").value+
+  "<br>"+document.getElementById("seal").value;
+}
+
+/* Music */
+function toggleMusic(){
+  const music=document.getElementById("music");
+  music.paused?music.play():music.pause();
+}
+
+/* Poem */
+function generatePoem(){
+  const poems=[
+    "Every heartbeat whispers your name.",
+    "With you, forever feels too short.",
+    "Your love is my favorite place to stay.",
+    "In your arms, the world fades away."
+  ];
+  const random=poems[Math.floor(Math.random()*poems.length)];
+  document.getElementById("displayMessage").innerHTML=random;
+}
+
+/* Upload */
+document.getElementById("upload").addEventListener("change",function(e){
+  const gallery=document.getElementById("gallery");
+  gallery.innerHTML="";
+  Array.from(e.target.files).forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=function(event){
+      const img=document.createElement("img");
+      img.src=event.target.result;
+      gallery.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+/* Map */
+document.getElementById("map").addEventListener("click",function(e){
+  const pin=document.createElement("div");
+  pin.className="pin";
+  pin.innerText="📍";
+  pin.style.left=e.offsetX+"px";
+  pin.style.top=e.offsetY+"px";
+  this.appendChild(pin);
+});
+</script>
+
+</body>
+  </html>
